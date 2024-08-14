@@ -34,7 +34,6 @@ const Plitki = () => {
   };
 
   const calculate = (item: PlitkiType) => {
-    // Нормализация ввода: заменяем запятые на точки
     const normalizedInput = quantities[item.article]?.replace(',', '.') || '0';
     const quantity = parseFloat(normalizedInput);
 
@@ -92,7 +91,7 @@ const Plitki = () => {
           </TableHead>
           <TableBody>
             {table.map((item, index) => (
-              <TableRow key={item.article}>
+              <TableRow key={index}>
                 <TableCell>{index + 1}</TableCell>
                 <TableCell>{item.article}</TableCell>
                 <TableCell>{item.name}</TableCell>
@@ -117,7 +116,7 @@ const Plitki = () => {
                     <>
                       <div>{`Пачки: ${results[item.article].packs}`}</div>
                       {results[item.article].pieces > 0 &&
-                        <div>{`Оставшиеся шт: ${results[item.article].pieces}`}</div>}
+                        <div>{`Шт: ${results[item.article].pieces}`}</div>}
                     </>
                   )}
                 </TableCell>
