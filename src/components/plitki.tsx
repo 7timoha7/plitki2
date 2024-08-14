@@ -3,6 +3,7 @@ import {PlitkiType} from "../type";
 import {plitkiMass} from "../constans";
 import {
   Button,
+  Container,
   Dialog,
   DialogActions,
   DialogContent,
@@ -17,7 +18,6 @@ import {
   TextField
 } from '@mui/material';
 
-
 const Plitki = () => {
   const [quantities, setQuantities] = useState<{ [key: number]: string }>({});
   const [results, setResults] = useState<{ [key: number]: { packs: number, pieces: number } }>({});
@@ -27,15 +27,17 @@ const Plitki = () => {
     article: null,
   });
 
-
-  const table = plitkiMass
+  const table = plitkiMass;
 
   const handleInputChange = (article: number, value: string) => {
     setQuantities({...quantities, [article]: value});
   };
 
   const calculate = (item: PlitkiType) => {
-    const quantity = parseFloat(quantities[item.article] || '0');
+    // Нормализация ввода: заменяем запятые на точки
+    const normalizedInput = quantities[item.article]?.replace(',', '.') || '0';
+    const quantity = parseFloat(normalizedInput);
+
     const packs = Math.floor(quantity / item.packageM2);
     const remainingM2 = quantity % item.packageM2;
 
@@ -66,9 +68,8 @@ const Plitki = () => {
     setDialogInfo({larger: 0, smaller: 0, article: null});
   };
 
-
   return (
-    <>
+    <Container>
       <TableContainer component={Paper}>
         <Table>
           <TableHead>
@@ -76,9 +77,9 @@ const Plitki = () => {
               <TableCell>№</TableCell>
               <TableCell>Артикул</TableCell>
               <TableCell>Наименование</TableCell>
-              <TableCell>м2 / 1шт</TableCell>
-              <TableCell>Упак шт / м2</TableCell>
-              <TableCell>Кол-во м2</TableCell>
+              <TableCell>м² / 1шт</TableCell>
+              <TableCell>Упак шт / м²</TableCell>
+              <TableCell>Кол-во м²</TableCell>
               <TableCell>Действие</TableCell>
               <TableCell>Результат</TableCell>
             </TableRow>
@@ -123,7 +124,10 @@ const Plitki = () => {
       <Dialog open={dialogInfo.article !== null} onClose={closeDialog}>
         <DialogTitle>Неверные данные для артикула {dialogInfo.article}</DialogTitle>
         <DialogContent>
-          <div>{`Большее значение: ${dialogInfo.larger.toFixed(2)} м²`}</div>
+          <div style={{
+            color: 'green',
+            marginBottom: '10px'
+          }}>{`Большее значение: ${dialogInfo.larger.toFixed(2)} м²`}</div>
           <div style={{color: 'red'}}>{`Меньшее значение: ${dialogInfo.smaller.toFixed(2)} м²`}</div>
         </DialogContent>
         <DialogActions>
@@ -132,7 +136,7 @@ const Plitki = () => {
           </Button>
         </DialogActions>
       </Dialog>
-    </>
+    </Container>
   );
 };
 
