@@ -38,6 +38,12 @@ const Plitki = () => {
     const normalizedInput = quantities[item.article]?.replace(',', '.') || '0';
     const quantity = parseFloat(normalizedInput);
 
+    if (isNaN(quantity) || quantity <= 0) {
+      // Если введенное значение некорректное, пропускаем расчет
+      alert(`Некорректное количество для артикула ${item.article}. Пожалуйста, введите правильное значение.`);
+      return;
+    }
+
     const packs = Math.floor(quantity / item.packageM2);
     const remainingM2 = quantity % item.packageM2;
 
